@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        input,button,textarea{
+            display: block;
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <form action="" onsubmit="uploadProduct();return false">
+        <input type="text" required placeholder="Product name" id="name">
+        <input type="number" required placeholder="Product price" id="price">
+        <textarea id="detail" placeholder="Product Description"></textarea>
+        <input type="file" accept=".jpg,.png"> 
+
+        <button>Upload</button>
+    </form>
+
+    <script>
+
+        nameRef = document.getElementById("name")
+        priceRef = document.getElementById("price")
+        detailRef = document.getElementById("detail")
+
+        async function uploadProduct() {
+            const payload ={
+                name:nameRef.value,
+                price:priceRef.value,
+                detail:detailRef.value
+            }
+
+            const rawResponse = await fetch("http://localhost:3000/product/add",{
+                method:"POST",
+                headers:{
+                    "content-type":"application/json",
+                    "authorization":sessionStorage.getItem("token")
+                },
+                body:JSON.stringify(payload)
+            })
+
+            const apiResponse = await rawResponse.json()
+
+            console.log(apiResponse)
+            alert(apiResponse.message)
+        }
+    </script>
+</body>
+</html>

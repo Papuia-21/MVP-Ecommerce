@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <style>
+        input,button{
+            display: block;
+            margin: 5px;
+        }
+
+        input{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" placeholder="Username" id="uname">
+    <input type="password" placeholder="Password" id="upass">
+
+    <button onclick="login()">Login</button>
+
+    <script>
+        unameRef = document.getElementById("uname")
+        upassRef = document.getElementById("upass")
+
+        async function login(){
+            const payload = {
+                username:unameRef.value,
+                password:upassRef.value
+            }
+
+            const rawResponse = await fetch("http://localhost:3000/auth/login",{
+                method:"POST",
+                headers:{
+                    "content-type":"application/json"
+                },
+                body:JSON.stringify(payload)
+            })
+ 
+            const apiResponse = await rawResponse.json() 
+            console.log(apiResponse)
+
+            alert(apiResponse.message)
+
+            if(apiResponse.error==false){
+
+                sessionStorage.setItem("token",apiResponse.token)
+
+                if(apiResponse.data.role.toLowerCase()=="vendor"){
+                    location.href="../frontend/vendor/home.html"
+                }
+                else if(apiResponse.data.role.toLowerCase()=="customer"){
+                    location.href="../frontend/customer/home.html"
+                }
+
+                //location.href="./home.html"
+            }
+        }
+    </script>
+</body>
+</html> 

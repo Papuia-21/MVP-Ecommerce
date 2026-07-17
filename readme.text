@@ -1,0 +1,47 @@
+MVP Ecommerce
+
+Features
+
+    SuperAdmin
+        Manage Payment
+   
+    Vendor Authentication - Done
+        Product/Stock Management - Done
+            Upload new Product - Done
+
+                DB
+                    create Product table
+                        pid - Auto increment list
+                        name - varchar
+                        price - float 
+                        description - text
+                        owner - fk_int 
+                        is_active - default true
+                        created_date - default current_timestamp
+                API
+                UI
+            Edit - Pending
+            Search/View Product - Done
+            Remove Product - Done
+        Order Management
+            View Customer Orders
+            Track Delivery Shipments
+        Refund Management
+            
+    Customer Authentication
+        Profile
+        View Products - Done
+        Manage Cart - Pending
+            Add Product to Cart
+            View
+            Remove
+        Place Order - TASK
+            COD
+        Review & Refund
+
+    Signup
+        username
+        password
+        emailid
+        mobile
+        role

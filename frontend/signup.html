@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        input,
+        button,
+        select {
+            display: block;
+            margin: 10px;
+        }
+
+        input,
+        select {
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <input type="text" placeholder="Enter username" id="uname">
+    <input type="password" placeholder="Enter password" id="upass">
+    <select id="urole">
+        <option value="Vendor">Vendor</option>
+        <option value="Customer">Customer</option>
+    </select>
+
+    <button onclick="signup()">Signup</button>
+
+    <script>
+
+        unameRef = document.getElementById("uname")
+        upassRef = document.getElementById("upass")
+        uroleRef = document.getElementById("urole")
+
+        async function signup() {
+
+            const payload = {
+                username: unameRef.value,
+                password: upassRef.value,
+                role: uroleRef.value
+            }
+
+            const rawResponse = await fetch("http://127.0.0.1:3000/auth/signup", {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+
+            const apiResponse = await rawResponse.json()
+
+            console.log("API response=", apiResponse)
+
+            alert(apiResponse.message)
+        }
+
+        signup()
+
+    </script>
+    
+</body>
+
+</html>

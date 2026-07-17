@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .pdt-card {
+            display: inline-block;
+            background-color: bisque;
+            margin: 5px;
+            padding: 10px;
+        }
+
+        .name {
+            font-size: 24px;
+            color: maroon;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 22px;
+            color: violet;
+        }
+
+        .price::before {
+            content: "Rs. ";
+            font-size: 16px;
+            color: goldenrod;
+        }
+
+        .action{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="parent">
+    </div>
+
+    <script>
+
+        parentRef = document.getElementById("parent")
+
+        async function getProducts() {
+            const rawResponse = await fetch("http://localhost:3000/product/list",{
+                method: "GET",
+                headers:{
+                    "authorization":sessionStorage.getItem("token")
+                }
+            })
+
+            const apiResponse = await rawResponse.json()
+            console.log(apiResponse)
+
+            renderProducts(apiResponse.data)
+        }
+
+        getProducts()
+
+        function renderProducts(products){
+
+            parentRef.innerHTML = ''
+
+            products.forEach(product => {
+                parentRef.innerHTML += `<div class='pdt-card'>
+                         <div class='name'>${product.name}</div>
+                         <div class='price'>${product.price}</div>
+                         <div>${product.detail}</div>
+                         <div class='action'>
+                             <button>Edit</button>   
+                             <button onclick="deletePdt(${product.pid})">Delete</button>   
+                         </div>
+                    </div>`
+            })
+        } 
+
+        async function deletePdt(pid){
+
+            const rawResponse = await fetch(`http://localhost:3000/product/remove/${pid}`,{
+                method:"delete",
+                headers:{
+                    "authorization":sessionStorage.getItem("token")
+                }
+            })
+
+            const apiResponse = await rawResponse.json()
+            console.log(apiResponse)
+            alert(apiResponse.message)
+
+            if(apiResponse.error == false){
+                getProducts()
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>

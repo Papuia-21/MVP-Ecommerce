@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .action {
+            border: 1px solid black;
+            height: fit-content;
+            width: 15%;
+            padding: 5px;
+            margin: 30px;
+        }
+
+        select {
+            margin: 10px;
+            margin-left: 20px;
+        }
+
+        button {
+            border-radius: 20px;
+            padding: 7px;
+            margin-left: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="action">
+            <input type="radio" name="payment" value="Upi" id="upi"> UPI <br>
+            <select id="utype">
+                <option value="">Choose an option</option>
+                <option value="axis">AXIS Bank</option>
+                <option value="sbi">SBI</option>
+                <option value="hdfc">HDFC Bank</option>
+            </select>
+
+            <br>
+            <input type="radio" name="payment" value="Card" id="card"> Card <br></br>
+
+            <input type="radio" name="payment" value="Cash on delivery" id="cod"> COD
+        </div>
+
+        <button onclick="paymentPdt()">Use this payment method</button>
+    </div>
+
+    <script>
+
+        async function paymentPdt() {
+
+            const params = new URLSearchParams(window.location.search)
+            const pid = params.get("pid")
+
+            let paymentMethod = ''
+
+            if(document.getElementById("upi").checked){
+                paymentMethod = "UPI"
+            }
+
+            else if(document.getElementById("card").checked){
+                paymentMethod = "Card"
+            }
+
+            else if(document.getElementById("cod").checked){
+                paymentMethod = "Cash On Delivery"
+            }
+
+            else{
+                alert("Please select payment method")
+                return
+            }
+
+            //console.log(pid)
+
+            const rawResponse = await fetch(`http://localhost:3000/product/buy/${pid}`, {
+                method: "POST",
+                headers: {
+                    "authorization": sessionStorage.getItem("token"),
+                    "content-type":"application/json"
+                },
+                body:JSON.stringify({
+                    paymentMethod: paymentMethod
+                })
+            })
+
+            const apiResponse = await rawResponse.json()
+            console.log(apiResponse)
+            alert(apiResponse.message)
+
+        }
+
+    </script>
+</body>
+
+</html>
